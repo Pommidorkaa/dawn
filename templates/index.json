@@ -6,7 +6,7 @@
         "heading": {
           "type": "heading",
           "settings": {
-            "heading": "Talk about your brand",
+            "heading": "Talk about your yourself",
             "heading_size": "medium"
           }
         },
@@ -61,6 +61,7 @@
             "button_style_secondary": false
           }
         }
+
       },
       "block_order": [
         "heading",
