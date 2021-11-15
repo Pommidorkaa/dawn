@@ -3,17 +3,32 @@
 
 <noscript>{{ 'component-rte.css' | asset_url | stylesheet_tag }}</noscript>
 <noscript>{{ 'section-rich-text.css' | asset_url | stylesheet_tag }}</noscript>
-<div class="rich-text-circle" style="
-    width: {{ section.settings.width }};
-    height: {{ section.settings.height }};
-    margin: 0 auto;
-    background-color: {{ section.settings.box-color }};
-
-">
-
+<div class="rich-text-circle">
+    {% for block in section.blocks %}
+        {% case block.type %}
+            {% when 'text-block' %}
+                <p>{{ block.settings.rich-text__text }}</p>
+            {% when 'image-block' %}
+            {{ block.settings.rich-image | img_tag: 'rich-text-image', 'rich-text-image'}}
+        {% endcase %}
+    {% endfor %}
 </div>
 
+{% style %}
+    .rich-text-circle{
+        width: {{ section.settings.width | append:"px" }};
+        height: {{ section.settings.height| append:"px" }};
+        margin: 0 auto;
+        background-color: {{ section.settings.box-color }};
+        border-radius: {{ section.settings.box-radius | append:"px" }};
+        margin-top:100px;
+        padding: 10px;
+        color:white;
+        text-align:center;
+        text-transform:uppercase;n
+    }
 
+{% endstyle %}
 {% schema %}
 {
   "name": "Rich Text",
@@ -22,25 +37,59 @@
     {
         "type": "range",
         "id": "width",
-        "label" : "Height",
-        "min":10,
-        "max":200,
-        "step":1
+        "label" : "Width",
+        "min":0,
+        "max":500,
+        "step":5,
+        "unit": "px",
+        "default":50
 
     },
     {
         "type" : "range",
         "id" : "height",
         "label" : "Height",
-        "min":10,
-        "max":200,
-        "step":1
+        "min":0,
+        "max":500,
+        "step":5,
+        "unit": "px",
+        "default":50
     },
     {
         "type" : "color",
         "id" : "box-color",
         "label" : "Color",
         "default": "#000000"
+    },
+    {
+        "type" : "number",
+        "id" : "box-radius",
+        "label" : "Box rounding",
+        "default": 20
+    }
+  ],
+  "blocks":[
+    {
+        "name": "Text",
+        "type": "text-block",
+        "settings": [
+            {
+                "type": "textarea",
+                "id": "rich-text__text",
+                "label" : "Text"
+            }
+        ]
+    },
+    {
+        "name": "Image",
+        "type": "image-block",
+        "settings" : [
+            {
+                "type" : "image_picker",
+                "id" : "rich-image",
+                "label": "image"
+            }
+        ]
     }
   ]
 }
